@@ -1,0 +1,14 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+    http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+                 version="2.0">
+	<named-query name="searchByName">
+		<query>from Student as student where student.name= :name</query>
+	</named-query>
+
+    <!--  this is used in the chapter on HQL, where we write a named query -->
+    <!--  please ignore it until then! -->
+
+</entity-mappings>
+
