@@ -9,13 +9,13 @@ import java.util.Set;
 
 @Entity
 
-public class Tutor extends Person {
-    /*  @Id
-      @GeneratedValue(strategy = GenerationType.AUTO)
-      private int id;*/
+public class Tutor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     @Column(unique = true, nullable = false)
     private String tutorId;
-    /*private String name;*/
+    private String name;
     private int salary;
     @ManyToMany(mappedBy = "tutors")
     private Set<Subject> subjectsToTeach;
@@ -24,18 +24,12 @@ public class Tutor extends Person {
     @JoinColumn(name = "TUTOR_FK")
     private Set<Student> teachingGroup;
 
-    //private Map<String,Student> teachingGroup;
     public Tutor() {
-        super(null);
-    }
 
-    @Override
-    public void getReport() {
-        System.out.println("Report for tutor: " + this.getName());
     }
 
     public Tutor(String tutorId, String name, int salary) {
-        super(name);
+        this.name = name;
         this.tutorId = tutorId;
         this.salary = salary;
         this.teachingGroup = new HashSet<Student>();
@@ -78,7 +72,7 @@ public class Tutor extends Person {
     }
 
     public String getName() {
-        return super.getName();
+        return name;
     }
 
     public int getSalary() {

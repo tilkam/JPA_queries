@@ -13,16 +13,16 @@
          <property name="hibernate.connection.driver_class"
                    value="org.apache.derby.jdbc.ClientDriver"/>
          <property name="hibernate.connection.url"
-                   value="jdbc:derby://localhost:50000/hibernate"/>
+                   value="jdbc:derby://localhost:50000/assignment"/>
          <!-- we do not need user name and password for the course
          <property name="hibernate.connection.username" value=""/>
          <property name="hibernate.connection.password" value=""/>
          -->
 
          <!--  tweak these to your own needs -->
-         <property name="hibernate.show_sql" value="false" />
+         <property name="hibernate.show_sql" value="true" />
          <property name="hibernate.format_sql" value="true" />
-         <property name="hibernate.hbm2ddl.auto" value="create" />
+         <property name="hibernate.hbm2ddl.auto" value="create"/>
       </properties>
 
    </persistence-unit>

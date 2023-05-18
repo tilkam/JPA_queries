@@ -1,42 +1,35 @@
 
 import jakarta.persistence.*;
-import se.yrgo.domain.Person;
 import se.yrgo.domain.Student;
 import se.yrgo.domain.Subject;
 import se.yrgo.domain.Tutor;
 
 import java.util.List;
+import java.util.Set;
 
 public class HibernateTest {
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("databaseConfig");
 
     public static void main(String[] args) {
-        /*setUpData();*/
+        setUpData();
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        Student newStudent = new Student("Eva Svensson","1-SVE-2019", "4th Street","Berlin","1010");
-        Tutor newTutor = new Tutor("3333", "Sara Reeves", 30000);
-
-        em.persist(newStudent);
-        em.persist(newTutor);
-
-        List<Student>students =em.createQuery("from Student").getResultList();
-        for(Student student:students) {
-            student.getReport();
+        Subject science = em.find(Subject.class, 2);
+        TypedQuery<Student> query = em.createQuery("select student from Student student, Tutor tutor where student member of tutor.teachingGroup and :subject member of tutor.subjectsToTeach",Student.class);
+        query.setParameter("subject", science);
+        List<Student> studentsInSubject = query.getResultList();
+        for (Student student : studentsInSubject) {
+            System.out.println(student);
         }
 
-        List<Person> persons = em.createQuery("from Person").getResultList();
-        for(Person person:persons) {
-            person.getReport();
-        }
 
         tx.commit();
         em.close();
     }
 
-    /*public static void setUpData() {
+    public static void setUpData() {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
@@ -58,7 +51,7 @@ public class HibernateTest {
         t2.addSubjectsToTeach(mathematics);
         t2.addSubjectsToTeach(science);
 
-        // This tutor is the only tutor who can teach History
+
         Tutor t3 = new Tutor("GHI678", "Karin Lindberg", 0);
         t3.addSubjectsToTeach(programming);
 
@@ -73,7 +66,7 @@ public class HibernateTest {
 
         tx.commit();
         em.close();
-    }*/
+    }
 
 
 }
