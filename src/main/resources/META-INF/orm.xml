@@ -6,7 +6,14 @@
 	<named-query name="searchByName">
 		<query>from Student as student where student.name= :name</query>
 	</named-query>
+	<!--
+	TASK 5:  NamedQuery
+	Write a named query that can return all the tutors that have a salary higher than 10000.
+	-->
 
+	<named-query name="searchSalaryHigherThanTenK">
+		<query>select tutor from Tutor tutor where tutor.salary > :salary</query>
+	</named-query>
     <!--  this is used in the chapter on HQL, where we write a named query -->
     <!--  please ignore it until then! -->
 

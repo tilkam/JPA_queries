@@ -5,7 +5,6 @@ import se.yrgo.domain.Subject;
 import se.yrgo.domain.Tutor;
 
 import java.util.List;
-import java.util.Set;
 
 public class HibernateTest {
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("databaseConfig");
@@ -16,27 +15,46 @@ public class HibernateTest {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        // TASK: QUERY USING MEMBER OF
+        // TASK 1: QUERY USING MEMBER OF
+        //Write a query to get the name of all students whose tutor can teach science.
         Subject science = em.find(Subject.class, 2);
-        TypedQuery<Student> query = em.createQuery("select student from Student student, Tutor tutor where student member of tutor.teachingGroup and :subject member of tutor.subjectsToTeach",Student.class);
+        TypedQuery<Student> query = em.createQuery("select student from Student student, Tutor tutor where student member of tutor.teachingGroup and :subject member of tutor.subjectsToTeach", Student.class);
         query.setParameter("subject", science);
         List<Student> studentsInSubject = query.getResultList();
         for (Student student : studentsInSubject) {
             System.out.println(student);
         }
 
-        //TASK: QUERY USING JOIN
-        Query queryJoin = em.createQuery("from Tutor as tutor inner join tutor.teachingGroup as student");
+        //TASK 2: QUERY USING JOIN
+        //Write a query to retrieve the name of all the students and the name of their tutor.
+        Query queryJoin = em.createQuery("select tutor, student from Tutor as tutor inner join tutor.teachingGroup as student");
         List<Object[]> results = queryJoin.getResultList();
         for (Object[] item : results) {
-            System.out.println(item[0] + "-------------------- "+ item[1]);
+            System.out.println(item[0] + "-------------------- " + item[1]);
         }
 
+        //TASK 3: REPORT QUERY- AGGREGATION
+        //Use aggregation to get the average semester length for the subjects.
+        double avgSemesterLength = (double) em.createQuery("select avg(subject.numberOfSemesters)from Subject subject").getSingleResult();
+        System.out.println("The average semester length is: " + avgSemesterLength);
+
+        //TASK 4: QUERY WITH AGGREGATION
+        //Write a query that can return the max salary from the tutor table.
+
+        int maxSalary = (int) em.createQuery("select max(tutor.salary) from Tutor tutor").getSingleResult();
+        System.out.println("The highest salary: " + maxSalary);
 
 
-
+        //TASK 5: NAMED QUERY
+        //Write a named query that can return all the tutors that have a salary higher than 10000.
+        List<Tutor> resultsSalary = em.createNamedQuery("searchSalaryHigherThanTenK").setParameter("salary", 10000).getResultList();
+        System.out.println("TUTORS WITH SALARY HIGHER THAN 10000");
+        for(Tutor tutor: resultsSalary) {
+            System.out.println(tutor);
+        }
         tx.commit();
         em.close();
+
     }
 
     public static void setUpData() {

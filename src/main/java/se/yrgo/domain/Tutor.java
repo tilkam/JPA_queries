@@ -81,11 +81,10 @@ public class Tutor {
 
     @Override
     public String toString() {
-        return "Tutor{" +
-                "tutorId='" + tutorId + '\'' +
-                ", name='" + this.getName() + '\'' +
-                ", salary=" + salary +
-                '}';
+        return "Tutor: " +
+                "name: " + this.getName() +
+                ", salary: " + salary +
+                ", tutorId: " + tutorId;
     }
 
     @Override
