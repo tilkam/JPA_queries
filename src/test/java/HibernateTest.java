@@ -16,6 +16,7 @@ public class HibernateTest {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
+        // TASK: QUERY USING MEMBER OF
         Subject science = em.find(Subject.class, 2);
         TypedQuery<Student> query = em.createQuery("select student from Student student, Tutor tutor where student member of tutor.teachingGroup and :subject member of tutor.subjectsToTeach",Student.class);
         query.setParameter("subject", science);
@@ -23,6 +24,15 @@ public class HibernateTest {
         for (Student student : studentsInSubject) {
             System.out.println(student);
         }
+
+        //TASK: QUERY USING JOIN
+        Query queryJoin = em.createQuery("from Tutor as tutor inner join tutor.teachingGroup as student");
+        List<Object[]> results = queryJoin.getResultList();
+        for (Object[] item : results) {
+            System.out.println(item[0] + "-------------------- "+ item[1]);
+        }
+
+
 
 
         tx.commit();
