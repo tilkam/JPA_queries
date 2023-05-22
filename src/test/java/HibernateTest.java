@@ -17,9 +17,11 @@ public class HibernateTest {
 
         // TASK 1: QUERY USING MEMBER OF
         //Write a query to get the name of all students whose tutor can teach science.
+
         Subject science = em.find(Subject.class, 2);
-        TypedQuery<Student> query = em.createQuery("select student from Student student, Tutor tutor where student member of tutor.teachingGroup and :subject member of tutor.subjectsToTeach", Student.class);
+        Query query = em.createQuery("select tutor.teachingGroup from Tutor tutor where :subject member of tutor.subjectsToTeach");
         query.setParameter("subject", science);
+         System.out.println("ALL STUDENTS THAT HAS A TUTOR WHO TEACHES SCIENCE: ");
         List<Student> studentsInSubject = query.getResultList();
         for (Student student : studentsInSubject) {
             System.out.println(student);
@@ -29,6 +31,7 @@ public class HibernateTest {
         //Write a query to retrieve the name of all the students and the name of their tutor.
         Query queryJoin = em.createQuery("select tutor, student from Tutor as tutor inner join tutor.teachingGroup as student");
         List<Object[]> results = queryJoin.getResultList();
+        System.out.println("NAMES OF ALL STUDENTS AND THEIR TEACHERS");
         for (Object[] item : results) {
             System.out.println(item[0] + "-------------------- " + item[1]);
         }
@@ -40,21 +43,18 @@ public class HibernateTest {
 
         //TASK 4: QUERY WITH AGGREGATION
         //Write a query that can return the max salary from the tutor table.
-
         int maxSalary = (int) em.createQuery("select max(tutor.salary) from Tutor tutor").getSingleResult();
         System.out.println("The highest salary: " + maxSalary);
-
 
         //TASK 5: NAMED QUERY
         //Write a named query that can return all the tutors that have a salary higher than 10000.
         List<Tutor> resultsSalary = em.createNamedQuery("searchSalaryHigherThanTenK").setParameter("salary", 10000).getResultList();
         System.out.println("TUTORS WITH SALARY HIGHER THAN 10000");
-        for(Tutor tutor: resultsSalary) {
+        for (Tutor tutor : resultsSalary) {
             System.out.println(tutor);
         }
         tx.commit();
         em.close();
-
     }
 
     public static void setUpData() {
